@@ -18,16 +18,16 @@ Arduino code for GPS logger
 * Parsing the data with arduino: https://learn.adafruit.com/adafruit-ultimate-gps/parsed-data-output
 
 # Proposed plan
-1. [ ] Direct computer connection for GPS module
-2. [ ] Breadboard LCD module + Arduino as debug/logging facility [TestLCD.ino]
-3. [ ] Breadboard GPS module + Arduino + LCD(debug) [TestGPSLCD.ino]
-4. [ ] SDCard test [TestSD/TestSD.ino] - we've got this one, let's check it still works
-5. [ ] Solder the GPS module and LCD module on the veroboard and wire them up
-6. [ ] Test each facility again separately:
+- [ ] Direct computer connection for GPS module
+- [ ] Breadboard LCD module + Arduino as debug/logging facility [TestLCD.ino]
+- [ ] Breadboard GPS module + Arduino + LCD(debug) [TestGPSLCD.ino]
+- [ ] SDCard test [TestSD/TestSD.ino] - we've got this one, let's check it still works
+- [ ] Solder the GPS module and LCD module on the veroboard and wire them up
+- [ ] Test each facility again separately:
   - [ ] LCD
   - [ ] GPS
   - [ ] SD-card
-7. [ ] Put it all together [GPSLogger/GPSLogger.ino]
+- [ ] Put it all together [GPSLogger/GPSLogger.ino]
 
 
 
