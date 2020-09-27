@@ -24,9 +24,9 @@ Arduino code for GPS logger
 4. [ ] SDCard test [TestSD/TestSD.ino] - we've got this one, let's check it still works
 5. [ ] Solder the GPS module and LCD module on the veroboard and wire them up
 6. [ ] Test each facility again separately:
-  a. [ ] LCD
-  b. [ ] GPS
-  c. [ ] SD-card
+  - [ ] LCD
+  - [ ] GPS
+  - [ ] SD-card
 7. [ ] Put it all together [GPSLogger/GPSLogger.ino]
 
 
