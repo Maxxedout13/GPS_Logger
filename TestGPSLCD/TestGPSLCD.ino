@@ -100,44 +100,61 @@ void loop() {
         timer = millis(); // reset the timer
 
         display.clearDisplay();
+
+        // Hour
         if (GPS.hour < 10) {
             display.print('0');
         }
         display.print(GPS.hour, DEC);
         display.print(':');
+        
+        // minutes
         if (GPS.minute < 10) {
             display.print('0');
         }
         display.print(GPS.minute, DEC);
         display.print(':');
+
+        // seconds
         if (GPS.seconds < 10) {
             display.print('0');
         }
         display.print(GPS.seconds, DEC);
+
         display.print(' ');
-        
+
+        // day
+        if (GPS.day < 10) {
+            display.print('0');
+        }
         display.print(GPS.day, DEC);
         display.print('/');
+
+        // months
+        if (GPS.month < 10) {
+            display.print('0');
+        }
         display.print(GPS.month, DEC);
+
+        // year
         display.print("/20");
         display.println(GPS.year, DEC);
 
         display.display();
-        //delay(500);
 
-        
-    //Serial.print("Fix: "); Serial.print((int)GPS.fix);
-    //Serial.print(" quality: "); Serial.println((int)GPS.fixquality);
-    //if (GPS.fix) {
-    //    Serial.print("Location: ");
-    //    Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
-    //    Serial.print(", ");
-    //    Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
-    //    Serial.print("Speed (knots): "); Serial.println(GPS.speed);
-    //    Serial.print("Angle: "); Serial.println(GPS.angle);
-    //    Serial.print("Altitude: "); Serial.println(GPS.altitude);
-    //    Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
-    //}
+
+        //Serial.print("Fix: "); Serial.print((int)GPS.fix);
+        //Serial.print(" quality: "); Serial.println((int)GPS.fixquality);
+        //if (GPS.fix) {
+        //    Serial.print("Location: ");
+        //    Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
+        //    Serial.print(", ");
+        //    Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+        //    Serial.print("Speed (knots): "); Serial.println(GPS.speed);
+        //    Serial.print("Angle: "); Serial.println(GPS.angle);
+        //    Serial.print("Altitude: "); Serial.println(GPS.altitude);
+        //    Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
+        //}
     }
 
 
