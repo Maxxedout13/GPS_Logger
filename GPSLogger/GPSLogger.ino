@@ -93,12 +93,6 @@ void setup() {
     
     // Write data header.
     writeHeader();
-
-    // Start on a multiple of the sample interval.
-    //logTime = micros()/(1000UL*SAMPLE_INTERVAL_MS) + 1;
-    //logTime *= 1000UL*SAMPLE_INTERVAL_MS;
-
-    //display.println("Initialized SD card...");
     delay(500);
 }
 
