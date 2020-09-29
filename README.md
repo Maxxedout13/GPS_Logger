@@ -37,6 +37,11 @@ Arduino code for GPS logger
 3. What do we show on the LCD? I suggest GPS time, and maybe number of measurements or some such counter. 
 4. Do we do any signal processing? E.g. get 15 measurements (within 1 second) and average them for location while doing a multi-point derivative for speed?
 
+# Calculations
+* GPS Logger will record yyyy/mm/dd hh:mm:ss, lat, lon, speed, bearing (every second ish?)
+* We can use haversine to calculate distances (https://www.movable-type.co.uk/scripts/latlong.html)
+
+
 
 
 
