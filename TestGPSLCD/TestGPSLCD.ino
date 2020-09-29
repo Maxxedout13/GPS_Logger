@@ -76,8 +76,8 @@ void loop() {
     display.setTextColor(SSD1306_WHITE);
     display.setCursor(0, 0);
 
-    display.println("Loop...");
-    display.display();
+    //display.println("Loop...");
+    //display.display();
     //delay(500);
 
     // read data from the GPS in the 'main loop'
@@ -123,7 +123,7 @@ void loop() {
         display.println(GPS.year, DEC);
 
         display.display();
-        delay(500);
+        //delay(500);
 
         
     //Serial.print("Fix: "); Serial.print((int)GPS.fix);
