@@ -52,7 +52,7 @@ int16_t AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
 
 
 void writeHeader() {
-    file.print(F("time,date,lat,lon,alt_m,speed_km_h,bearing"));
+    file.print(F("time,date,lat,lon,alt_m,speed_km_h,bearing,AccX,AccY,AccZ,GyroX,GyroY,GyroZ"));
     file.println();
 }
 
@@ -167,7 +167,23 @@ void write_to_sd() {
     data_string += String(fix.speed_kph(), 4);
     data_string += ",";
     data_string += String(fix.heading());
+    data_string += ",";
 
+    // AccX,Y,Z
+    data_string += String(AccX);
+    data_string += ",";
+    data_string += String(AccY);
+    data_string += ",";
+    data_string += String(AccZ);
+    data_string += ",";
+
+    // Gyros X,Y,Z
+    data_string += String(GyroX);
+    data_string += ",";
+    data_string += String(GyroY);
+    data_string += ",";
+    data_string += String(GyroZ);
+    
     file.print(data_string);
     file.println();
 
@@ -182,6 +198,7 @@ void write_to_sd() {
 void handle_fix() {
     display.clear();
 
+    /*
     display.print(AccX, DEC);
     display.print("/");
     display.print(AccY, DEC);
@@ -195,10 +212,10 @@ void handle_fix() {
     display.print("/");
     display.print(GyroZ, DEC);
     display.println("");
-
+    */
 
     
-    /*
+
     // Hour
     if (fix.dateTime.hours < 10) {
         display.print('0');
@@ -231,15 +248,14 @@ void handle_fix() {
     // year
     display.print("/20");
     display.println(fix.dateTime.year, DEC);
-    */
 
 
     
     if (fix.valid.location) {
         // Latitude
-        //display.println(fix.latitude(), 8);
+        display.println(fix.latitude(), 8);
         // Longitude            
-        //display.println(fix.longitude(), 8);
+        display.println(fix.longitude(), 8);
         
         // Altitude
         display.print(fix.altitude());
@@ -270,7 +286,7 @@ void loop() {
             //display.println("Fix... STATUS_TIME_ONLY"); 
             break;
         case fix.STATUS_STD:
-            //handle_fix();
+            handle_fix();
             break;
         case fix.STATUS_DGPS:
             //display.println("Fix... STATUS_DGPS"); 
@@ -296,7 +312,7 @@ void loop() {
     GyroZ=Wire.read()<<8|Wire.read();
     digitalWrite(12, HIGH);
 
-    handle_fix();
+    //handle_fix();
     
 }
 
