@@ -43,6 +43,14 @@ SdFile file;
 const uint8_t ANALOG_COUNT = 4;
 
 
+/* Acc */
+#include <Wire.h>
+const int MPU6050_addr=0x68;
+int16_t AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
+
+
+
+
 void writeHeader() {
     file.print(F("time,date,lat,lon,alt_m,speed_km_h,bearing"));
     file.println();
@@ -90,6 +98,14 @@ void setup() {
         display.println("file.open");
     }
     display.println(fileName);
+
+    /* Acc */
+    Wire.begin(); 
+    Wire.beginTransmission(MPU6050_addr);
+    Wire.write(0x6B);
+    Wire.write(0);
+    Wire.endTransmission(true);
+
     
     // Write data header.
     writeHeader();
@@ -136,11 +152,11 @@ void write_to_sd() {
     data_string += ",";
     
     // Lat
-    data_string += String(fix.latitude(), 4);
+    data_string += String(fix.latitude(), 8);
     data_string += ",";
     
     // Longitude            
-    data_string += String(fix.longitude(), 4);
+    data_string += String(fix.longitude(), 8);
     data_string += ",";
     
     // Altitude
@@ -148,7 +164,7 @@ void write_to_sd() {
     data_string += ",";
     
     // Speed & heading
-    data_string += String(fix.speed_kph() * 1.852, 4);
+    data_string += String(fix.speed_kph(), 4);
     data_string += ",";
     data_string += String(fix.heading());
 
@@ -165,6 +181,24 @@ void write_to_sd() {
 
 void handle_fix() {
     display.clear();
+
+    display.print(AccX, DEC);
+    display.print("/");
+    display.print(AccY, DEC);
+    display.print("/");
+    display.print(AccZ, DEC);
+    display.println("");
+
+    display.print(GyroX, DEC);
+    display.print("/");
+    display.print(GyroY, DEC);
+    display.print("/");
+    display.print(GyroZ, DEC);
+    display.println("");
+
+
+    
+    /*
     // Hour
     if (fix.dateTime.hours < 10) {
         display.print('0');
@@ -197,16 +231,15 @@ void handle_fix() {
     // year
     display.print("/20");
     display.println(fix.dateTime.year, DEC);
+    */
 
+
+    
     if (fix.valid.location) {
         // Latitude
-        display.print(fix.latitude(), 4);
-        display.print(", ");
-
+        //display.println(fix.latitude(), 8);
         // Longitude            
-        display.print(fix.longitude(), 4);
-        display.println("");
-        
+        //display.println(fix.longitude(), 8);
         
         // Altitude
         display.print(fix.altitude());
@@ -215,8 +248,8 @@ void handle_fix() {
         // Speed & Heading
         display.print(fix.speed_kph(), 4);
         display.println("km/h ");
-        display.print(fix.heading());
-        display.print("o");
+        //display.print(fix.heading());
+        //display.print("o");
     }
     write_to_sd();
     delay(200);
@@ -237,7 +270,7 @@ void loop() {
             //display.println("Fix... STATUS_TIME_ONLY"); 
             break;
         case fix.STATUS_STD:
-            handle_fix();
+            //handle_fix();
             break;
         case fix.STATUS_DGPS:
             //display.println("Fix... STATUS_DGPS"); 
@@ -246,6 +279,25 @@ void loop() {
             display.println("Fix... unknown"); 
         }
     } // gps available
+
+    
+
+    digitalWrite(12, LOW);
+    Wire.beginTransmission(MPU6050_addr);
+    Wire.write(0x3B);
+    Wire.endTransmission(false);
+    Wire.requestFrom(MPU6050_addr,14,true);
+    AccX=Wire.read()<<8|Wire.read();
+    AccY=Wire.read()<<8|Wire.read();
+    AccZ=Wire.read()<<8|Wire.read();
+    Temp=Wire.read()<<8|Wire.read();
+    GyroX=Wire.read()<<8|Wire.read();
+    GyroY=Wire.read()<<8|Wire.read();
+    GyroZ=Wire.read()<<8|Wire.read();
+    digitalWrite(12, HIGH);
+
+    handle_fix();
+    
 }
 
 
