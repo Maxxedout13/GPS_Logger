@@ -40,7 +40,6 @@ const uint8_t chipSelect = 4;
 #define FILE_BASE_NAME "Data"
 SdFat sd;
 SdFile file;
-const uint8_t ANALOG_COUNT = 4;
 
 
 /* Acc */
@@ -78,6 +77,7 @@ void setup() {
     // Initialize at the highest speed supported by the board that is
     // not over 50 MHz. Try a lower speed if SPI errors occur.
     if (!sd.begin(chipSelect, SD_SCK_MHZ(50))) {
+        display.println("sd.initErrorHalt...");
         sd.initErrorHalt();
     }
     // Find an unused file name.
