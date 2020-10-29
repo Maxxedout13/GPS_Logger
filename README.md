@@ -43,9 +43,19 @@ Arduino code for GPS logger
 
 
 
+# Flashing directly to MCU
+
+```
+[nawal@heisenbug:~/data/Max/GPS_Logger]$ ls /tmp/arduino_*/*bootloader.hex
+/tmp/arduino_build_971023/GPSLogger.ino.with_bootloader.hex
+
+ROOT=/nix/store/z187mma0ig2h7lbpq459wpic2442v4cy-arduino-1.8.9/share/arduino/hardware/tools/avr/
+$ROOT/bin/avrdude -C $ROOT/etc/avrdude.conf -c usbasp -P /dev/ttyS0 -p atmega328p -B5 -e -U flash:w:/tmp/arduino_build_971023/GPSLogger.ino.with_bootloader.hex
 
 
 
+```
+                      
 
 
 
