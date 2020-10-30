@@ -103,7 +103,7 @@ print('plot')
 
 print(list(zip(lon_arr, lat_arr)))
 
-ax1.plot(lon_arr, lat_arr, markersize=5,marker='o',linestyle='',color='red',transform=ccrs.PlateCarree())
+ax1.plot(lon_arr, lat_arr, markersize=5,marker='x',alpha=0.5, linestyle='',color='red',transform=ccrs.PlateCarree())
 
 print('show')
 
