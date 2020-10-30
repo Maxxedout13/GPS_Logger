@@ -268,9 +268,7 @@ void handle_fix() {
     // year
     display.print("/20");
     display.println(fix.dateTime.year, DEC);
-
-
-    
+   
     if (fix.valid.location) {
         // Latitude
         display.println(fix.latitude(), 8);
@@ -287,14 +285,7 @@ void handle_fix() {
         //display.print(fix.heading());
         //display.print("o");
     }
-    delay(200);
-
-    display.clear();
-    display.println("writing to sd card");
     write_to_sd();
-    display.println("written to sd card");
-
-    delay(200);
     wdt_reset(); // feed the dog
 
 }
@@ -303,7 +294,6 @@ void handle_fix() {
 void loop() {
     while (gps.available(gpsPort)) {
         display.println("gps available");
-        delay(100);
         fix = gps.read();
         switch (fix.status) {
         case fix.STATUS_NONE:
@@ -320,6 +310,7 @@ void loop() {
             break;
         case fix.STATUS_STD:
             handle_fix();
+            //delay(500);
             break;
         case fix.STATUS_DGPS:
             display.println("Fix... STATUS_DGPS");
@@ -344,7 +335,6 @@ void loop() {
     GyroY=Wire.read()<<8|Wire.read();
     GyroZ=Wire.read()<<8|Wire.read();
     digitalWrite(12, HIGH);
-   
 }
 
 
