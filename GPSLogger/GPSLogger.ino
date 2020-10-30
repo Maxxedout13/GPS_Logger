@@ -51,19 +51,24 @@ int16_t AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
 #include <avr/wdt.h>
 
 void setup_watchdog() {
-    // wait until first fix before we set it up, and hope to get fixes at least every 4 seconds, and if that fails, we reboot (no watchdog again until first fix)
+    // We only want to reboot when STATUS_DGPS. So setup the watchdog then and wait a long time
     /* Setup watchdog 
        3 2 1 0 WDP
+       0 0 0 0 16ms
+       0 0 0 1 32ms
+       0 0 1 0 64ms <-----
+       0 0 1 1 0.125s
+       0 1 0 0 0.25s
+       0 1 0 1 0.5s
        0 1 1 0 1000ms
        0 1 1 1 2000ms
-       1 0 0 0 4000ms <-----
+       1 0 0 0 4000ms 
     */
     cli();
     wdt_reset(); 
     WDTCSR |= (1<<WDCE) | (1<<WDE);  // Enter Watchdog Configuration mode:
     WDTCSR = (1<<WDE) |
-        (1<<WDP3) | (0<<WDP2) | (0<<WDP1) |
-        (0<<WDP0);
+        (0<<WDP3) | (0<<WDP2) | (1<<WDP1) | (0<<WDP0);
     sei();
 }
 
@@ -210,7 +215,6 @@ void write_to_sd() {
         display.println("write error");
         delay(1000);
     }
-    wdt_reset(); // feed the dog
 
 }
 
@@ -286,8 +290,6 @@ void handle_fix() {
         //display.print("o");
     }
     write_to_sd();
-    wdt_reset(); // feed the dog
-
 }
 
 
@@ -314,7 +316,8 @@ void loop() {
             break;
         case fix.STATUS_DGPS:
             display.println("Fix... STATUS_DGPS");
-            delay(100);
+            setup_watchdog();
+            delay(10000);
             break;
         default:
             display.println("Fix... unknown");
