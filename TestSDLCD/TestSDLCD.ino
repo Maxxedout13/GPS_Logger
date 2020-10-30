@@ -37,6 +37,9 @@ void setup() {
     delay(1000);
     
 
+
+
+    
     // ******************** SD CARD ************************ //
     const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
     char fileName[13] = FILE_BASE_NAME "00.csv";  
@@ -44,8 +47,11 @@ void setup() {
     // Initialize at the highest speed supported by the board that is
     // not over 50 MHz. Try a lower speed if SPI errors occur.
     if (!sd.begin(chipSelect, SD_SCK_MHZ(50))) {
+        display.println("sd.initErrorHalt");
         sd.initErrorHalt();
     }
+    display.println("sd initialised");
+
     // Find an unused file name.
     if (BASE_NAME_SIZE > 6) {
         display.println("FILE_BASE_NAME too long");

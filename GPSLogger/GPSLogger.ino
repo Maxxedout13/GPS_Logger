@@ -47,6 +47,25 @@ SdFile file;
 const int MPU6050_addr=0x68;
 int16_t AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
 
+// Watchdog
+#include <avr/wdt.h>
+
+void setup_watchdog() {
+    // wait until first fix before we set it up, and hope to get fixes at least every 4 seconds, and if that fails, we reboot (no watchdog again until first fix)
+    /* Setup watchdog 
+       3 2 1 0 WDP
+       0 1 1 0 1000ms
+       0 1 1 1 2000ms
+       1 0 0 0 4000ms <-----
+    */
+    cli();
+    wdt_reset(); 
+    WDTCSR |= (1<<WDCE) | (1<<WDE);  // Enter Watchdog Configuration mode:
+    WDTCSR = (1<<WDE) |
+        (1<<WDP3) | (0<<WDP2) | (0<<WDP1) |
+        (0<<WDP0);
+    sei();
+}
 
 
 
@@ -66,7 +85,7 @@ void setup() {
     delay(500);
     
     // ********************* GPS Setup ********************* //
-    gpsPort.begin( 9600 );
+    gpsPort.begin(76800); // 9600 * 8
     display.println("Initialised GPS...");
     delay(500);
 
@@ -191,6 +210,7 @@ void write_to_sd() {
         display.println("write error");
         delay(1000);
     }
+    wdt_reset(); // feed the dog
 
 }
 
@@ -267,36 +287,49 @@ void handle_fix() {
         //display.print(fix.heading());
         //display.print("o");
     }
-    write_to_sd();
     delay(200);
+
+    display.clear();
+    display.println("writing to sd card");
+    write_to_sd();
+    display.println("written to sd card");
+
+    delay(200);
+    wdt_reset(); // feed the dog
+
 }
 
 
 void loop() {
     while (gps.available(gpsPort)) {
+        display.println("gps available");
+        delay(100);
         fix = gps.read();
         switch (fix.status) {
         case fix.STATUS_NONE:
-            //display.println("Fix... STATUS_NONE"); 
+            display.println("Fix... STATUS_NONE");
+            delay(100);
             break;
         case fix.STATUS_EST:
-            //display.println("Fix... STATUS_EST"); 
+            display.println("Fix... STATUS_EST");
+            delay(100);
             break;
         case fix.STATUS_TIME_ONLY:
-            //display.println("Fix... STATUS_TIME_ONLY"); 
+            display.println("Fix... STATUS_TIME_ONLY");
+            delay(100);
             break;
         case fix.STATUS_STD:
             handle_fix();
             break;
         case fix.STATUS_DGPS:
-            //display.println("Fix... STATUS_DGPS"); 
+            display.println("Fix... STATUS_DGPS");
+            delay(100);
             break;
         default:
-            display.println("Fix... unknown"); 
+            display.println("Fix... unknown");
+            delay(100);
         }
     } // gps available
-
-    
 
     digitalWrite(12, LOW);
     Wire.beginTransmission(MPU6050_addr);
@@ -311,9 +344,7 @@ void loop() {
     GyroY=Wire.read()<<8|Wire.read();
     GyroZ=Wire.read()<<8|Wire.read();
     digitalWrite(12, HIGH);
-
-    //handle_fix();
-    
+   
 }
 
 
