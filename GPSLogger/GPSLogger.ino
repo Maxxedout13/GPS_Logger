@@ -311,13 +311,15 @@ void loop() {
             delay(100);
             break;
         case fix.STATUS_STD:
+            display.println("Fix... STATUS_STD");
             handle_fix();
             //delay(500);
             break;
         case fix.STATUS_DGPS:
             display.println("Fix... STATUS_DGPS");
-            setup_watchdog();
-            delay(10000);
+            handle_fix();
+            //setup_watchdog();
+            //delay(10000);
             break;
         default:
             display.println("Fix... unknown");
